@@ -1,58 +1,51 @@
-import clients from '../../api/clients'
+import reservas from '../../api/reservas'
 
 // initial state
 const state = {
   all: [],
-  userSelected: [],
+  reservaSelected: [],
   addStatus: null,
   addFailure: null
 }
 
 // getters
 const getters = {
-  allClients: state => state.all,
+  allReservas: state => state.all,
   addStatus: state => state.addStatus,
-  userSelected: state => state.userSelected,
+  reservaSelected: state => state.reservaSelected,
   addFailure: state => state.addFailure,
 }
 
 // actions
 const actions = {
-  getAllClients ({ commit }) {
-    clients.getClients(clients => {
-      commit('obtenerClientes', { clients })
+  getAllReservas ({ commit }) {
+    reservas.getReservas(reservas => {
+      commit('obtenerReservas', { reservas })
     })
   },
 
-  buscarCliente ({ commit }, data) {
-    clients.getClientByDni(
-      data,
-      client => {commit('seleccionCliente', { client })
-    })
-  },
-
-  addClient ({ commit }, data) {
-    clients.addClient(
+  addReserva ({ commit }, data) {
+    reservas.addReserva(
       data,
       msg => { commit('mensajeExito', { msg })},
       msgs => {commit('mensajeFalla', {msgs})}
     )
   },
 
-  selectClient ({ commit }, client) {    
-     commit('seleccionCliente', { client })
+  selectReserva ({ commit }, client) {    
+     commit('seleccionReservas', { client })
   },
 
-  updateClient ({ commit }, data) {
-    clients.updateClient(
+  updateReserva ({ commit }, data) {
+    reservas.updateReserva(
       data,
       msg => { commit('mensajeExito', { msg })},
       msgs => {commit('mensajeFalla', {msgs})}
     )
   },
 
-  deleteClient ({ commit }, data) {
-    clients.deleteClient(data)
+  deleteReserva ({ commit }, data) {
+    reservas.deleteReserva(data)
   },
   
   mensajeExito ({ commit }, msg) {
@@ -65,13 +58,13 @@ const actions = {
 
 // mutations
 const mutations = {
-    seleccionCliente (state, { client }) {
-        state.userSelected = client
+    seleccionReservas (state, { client }) {
+        state.reservaSelected = client
         state.addStatus = null
     },
 
-    obtenerClientes (state, { clients }) {
-        state.all = clients
+    obtenerReservas (state, { reservas }) {
+        state.all = reservas
     },
 
   mensajeExito (state, { msg }) {

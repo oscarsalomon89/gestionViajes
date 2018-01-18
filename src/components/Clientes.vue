@@ -68,7 +68,6 @@
 <script>
 import Navbar from './Navbar.vue'
 import { mapGetters, mapActions } from 'vuex'
-import Navbar from './Navbar.vue'
 import FormCliente from './FormCliente.vue'
 
 export default {

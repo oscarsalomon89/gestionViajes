@@ -1,27 +1,21 @@
 import {db} from '../helpers/firebaseConfig'
 
-var users = db.ref('users')
+var reservas = db.ref('reservas')
 
 export default {
-  getClients (clientes) {
-    users.on('value', function(snapshot) {
+    getReservas (clientes) {
+    reservas.on('value', function(snapshot) {
       clientes(snapshot.val());
     });             
   },
 
-  getClientByDni (data, cb) {
-    users.orderByChild('dni').equalTo(data.dni).on('child_added', function(snapshot) {
-      cb(snapshot.val());
-    });             
-  },
-
-  addClient (data, cb, errorCb) {
-    var keyUser = users.push(data).key;
+  addReserva (data, cb, errorCb) {
+    var keyUser = reservas.push(data).key;
     cb('Cliente Agregado con exito');
   },
 
-  updateClient (data, cb, errorCb) {
-    users.child(data.id).update({"name": data.name,
+  updateReserva (data, cb, errorCb) {
+    reservas.child(data.id).update({"name": data.name,
                                 "email":data.email,"telefono":data.telefono}).
                                 then(function() {
                                   var ms = 'Cliente modificado con exito';
@@ -32,7 +26,7 @@ export default {
                                 });
   },
 
-  deleteClient (data, cb) {
-    users.child(data.id).remove()
+  deleteReserva (data, cb) {
+    reservas.child(data.id).remove()
   }
 }
