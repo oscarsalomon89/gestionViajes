@@ -11,9 +11,7 @@ const state = {
 // getters
 const getters = {
   allReservas: state => state.all,
-  addStatus: state => state.addStatus,
-  reservaSelected: state => state.reservaSelected,
-  addFailure: state => state.addFailure,
+  reservaSelected: state => state.reservaSelected
 }
 
 // actions
@@ -60,21 +58,11 @@ const actions = {
 const mutations = {
     seleccionReservas (state, { client }) {
         state.reservaSelected = client
-        state.addStatus = null
     },
 
     obtenerReservas (state, { reservas }) {
         state.all = reservas
-    },
-
-  mensajeExito (state, { msg }) {
-    state.addStatus = msg
-  },
-
-  mensajeFalla (state, { msgs }) {
-    // rollback to the cart saved before sending the request
-    state.addFailure = msgs
-  }
+    }
 }
 
 export default {

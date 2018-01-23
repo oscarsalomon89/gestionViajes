@@ -43,13 +43,15 @@
                   <th>Dni</th>
                   <th>Telefono</th>
                   <th>Monto</th>
+                  <th></th>
               </tr>
               </thead>
               <tr v-for="(reserva,key,index) in listReservas" :key="key">
-                <th scope="row">{{reserva.nombre}}</th>
+                <td>{{index}}</td>
+                <th scope="row">{{reserva.name}}</th>
                 <td>{{reserva.dni}}</td>
                 <td>{{reserva.telefono}}</td>
-                <td>{{ reserva.monto }}</td>
+                <td scope="row">{{ reserva.monto }}</td>
                 <td>
                 <button @click="deleteReserva(key)" class="btn btn-danger btn-sm">
                     eliminar
@@ -100,20 +102,31 @@
         addReserva(){          
             let vm = this;
             var id   = document.getElementById('idreserva').value;
-            var reserva = document.getElementById('inputReserva').value;
-            var email = document.getElementById('inputEmail').value;
-            var dni = document.getElementById('inputDni').value; 
-            var tel = document.getElementById('inputTelefono').value;          
+            var idcliente = document.getElementById('idcliente').value;
+            var dni = document.getElementById('inputDni').value;
+            var name = document.getElementById('inputName').value; 
+            var telefono = document.getElementById('inputTelefono').value;
+            var monto = document.getElementById('inputMonto').value;          
 
-            if (reserva =='' || dni == '') {
+            if (monto =='' || dni == '' || name == '' || telefono == '') {
               var msgError = 'Datos incompletos';
               this.$store.dispatch('mensajeFalla', msgError)
             } else {
+              if(idcliente == ''){                
+                var dataClient = {
+                    dni: dni,
+                    name: name,
+                    telefono: telefono
+                  };
+                this.$store.dispatch('addClient', dataClient);
+              }
+
               var data = {
-                  name: reserva,
-                  email: email,
+                  idcliente: idcliente,
                   dni: dni,
-                  telefono: tel
+                  monto: monto,
+                  name: name,
+                  telefono: telefono
                   };
 
                   if(id != ''){
@@ -121,7 +134,7 @@
                     return;
                   }
 
-                  this.$store.dispatch('addClient', data)
+                  this.$store.dispatch('addReserva', data)
                       .then(function(res){
                           //vm.$store.dispatch('getAllClients')
                           vm.showForm = false;                                  
@@ -133,7 +146,7 @@
         updateReserva(reserva,id){
             let vm = this;
             reserva.id = id;
-            this.$store.dispatch('updateClient', reserva)
+            this.$store.dispatch('updateReserva', reserva)
                 .then(function(res){
                     //vm.$store.dispatch('getAllClients')
                     vm.showForm = false;//oculta el form                              
@@ -146,12 +159,11 @@
               this.$store.dispatch('deleteClient',data)
               //this.$store.dispatch('getAllClients')      
           },
-          editarUsuario(reserva,key){  
+          editarReserva(reserva,key){  
               reserva.id = key;           
               this.showForm = true;
-              this.$store.dispatch('selectClient',reserva);
-              this.$store.dispatch('failMensaje', '');
-              document.getElementById('myModalLabel').innerHTML = 'Editar Usuario';
+              this.$store.dispatch('selectReserva',reserva);
+              document.getElementById('myModalLabel').innerHTML = 'Editar Reserva';
 
               $('#myModal').modal('show');
           }      

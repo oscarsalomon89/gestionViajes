@@ -11,7 +11,9 @@ export default {
 
   getClientByDni (data, cb) {
     users.orderByChild('dni').equalTo(data.dni).on('child_added', function(snapshot) {
-      cb(snapshot.val());
+      var result = snapshot.val();
+      result['idcliente'] = snapshot.key;
+      cb(result);
     });             
   },
 

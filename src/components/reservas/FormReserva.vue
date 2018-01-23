@@ -1,6 +1,7 @@
 <template>
     <form v-on:submit.prevent class="form-horizontal">
         <input type="hidden" v-bind:value="reserva.id" id="idreserva" name="idreserva">
+        <input type="hidden" v-bind:value="userSelected.idcliente" id="idcliente" name="idcliente">
         <div class="form-group row">
             <label class="col-sm-4 control-label">D.N.I</label>
             <div class="col-sm-8">
@@ -33,7 +34,8 @@ import { mapGetters, mapActions } from 'vuex'
  export default {
     props: ['reserva'],
     computed: mapGetters({
-        userSelected: 'userSelected'
+        userSelected: 'userSelected',
+        reservaSelected: 'userSelected'
       }),
     data() {
           return {

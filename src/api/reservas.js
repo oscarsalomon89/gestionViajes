@@ -1,9 +1,10 @@
 import {db} from '../helpers/firebaseConfig'
 
 var reservas = db.ref('reservas')
+var users = db.ref('users')
 
 export default {
-    getReservas (clientes) {
+  getReservas (clientes) {
     reservas.on('value', function(snapshot) {
       clientes(snapshot.val());
     });             
