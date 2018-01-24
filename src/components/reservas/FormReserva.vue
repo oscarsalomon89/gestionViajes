@@ -1,23 +1,23 @@
 <template>
     <form v-on:submit.prevent class="form-horizontal">
         <input type="hidden" v-bind:value="reserva.id" id="idreserva" name="idreserva">
-        <input type="hidden" v-bind:value="userSelected.idcliente" id="idcliente" name="idcliente">
-        <div class="form-group row">
-            <label class="col-sm-4 control-label">D.N.I</label>
-            <div class="col-sm-8">
-                <input type="text" v-model="dni" @keyup.enter="buscarDni()" id="inputDni" class="form-control" placeholder="DNI">
+        <input type="hidden" v-bind:value="reserva.idcliente" id="idcliente" name="idcliente">
+        <div class="input-group mb-3">
+            <input type="text" :disabled="disabled" v-bind:value="reserva.dni" @keyup.enter="buscarDni()" id="inputDni" class="form-control" placeholder="DNI">
+            <div class="input-group-append">
+                <button :disabled="disabled" class="btn btn-outline-secondary" @click="buscarDni()" type="button">Buscar</button>
             </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-4 control-label">Nombre Completo</label>
             <div class="col-sm-8">
-                <input type="text" v-bind:value="userSelected.name" class="form-control" id="inputName" placeholder="Nombre completo">
+                <input type="text" :disabled="disabled" v-bind:value="reserva.name" class="form-control" id="inputName" placeholder="Nombre completo">
             </div>
         </div>        
         <div class="form-group row">
             <label class="col-sm-4 control-label">Telefono</label>
             <div class="col-sm-8">
-                <input type="text" v-bind:value="userSelected.telefono" id="inputTelefono" class="form-control" placeholder="Telefono">
+                <input type="text" :disabled="disabled" v-bind:value="reserva.telefono" id="inputTelefono" class="form-control" placeholder="Telefono">
             </div>
         </div>
         <div class="form-group row">
@@ -32,19 +32,18 @@
 import { mapGetters, mapActions } from 'vuex'
 
  export default {
-    props: ['reserva'],
+    props: ['reserva','disabled'],
     computed: mapGetters({
-        userSelected: 'userSelected',
-        reservaSelected: 'userSelected'
+        reservaSelected: 'reservaSelected'
       }),
-    data() {
-          return {
-              dni: this.reserva.dni,
-          }
-      },
     methods: {
       buscarDni(){
-          this.$store.dispatch('buscarCliente',{dni: this.dni});
+          document.getElementById('idcliente').value = '';
+          document.getElementById('inputName').value = ''; 
+          document.getElementById('inputTelefono').value = '';
+
+          var dni = document.getElementById('inputDni').value;
+          this.$store.dispatch('buscarCliente',{dni: dni});
         }
     }
  }

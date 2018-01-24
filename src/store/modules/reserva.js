@@ -1,4 +1,5 @@
 import reservas from '../../api/reservas'
+import clients from '../../api/clients'
 
 // initial state
 const state = {
@@ -34,6 +35,13 @@ const actions = {
      commit('seleccionReservas', { client })
   },
 
+  buscarCliente ({ commit }, data) {
+    clients.getClientByDni(
+      data,
+      client => {commit('seleccionClienteReserva', { client })
+    })
+  },
+
   updateReserva ({ commit }, data) {
     reservas.updateReserva(
       data,
@@ -59,6 +67,10 @@ const mutations = {
     seleccionReservas (state, { client }) {
         state.reservaSelected = client
     },
+
+    seleccionClienteReserva (state, { client }) {
+      state.reservaSelected = client
+  },
 
     obtenerReservas (state, { reservas }) {
         state.all = reservas

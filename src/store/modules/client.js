@@ -24,13 +24,6 @@ const actions = {
     })
   },
 
-  buscarCliente ({ commit }, data) {
-    clients.getClientByDni(
-      data,
-      client => {commit('seleccionCliente', { client })
-    })
-  },
-
   addClient ({ commit }, data) {
     clients.addClient(
       data,

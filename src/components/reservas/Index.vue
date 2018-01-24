@@ -18,7 +18,7 @@
         </button>
       </div>
       <div class="modal-body">
-          <FormReserva v-show="addStatus == null" :reserva="reservaSelected"></FormReserva>
+          <FormReserva v-show="addStatus == null" :reserva="reservaSelected" :disabled="disabled"></FormReserva>
           <p v-show="addFailure != null">{{ addFailure }}</p>
           <p v-show="addStatus != null">{{ addStatus }}</p>
       </div>
@@ -82,7 +82,7 @@
       }),
       data() {
           return {
-              showForm: true,
+              disabled: false,
               titulo: 'Nueva Reserva'
           }
       },
@@ -91,11 +91,9 @@
       },
       methods: {
         openAddReserva(){
-          this.showForm = true;
-          this.$store.dispatch('selectClient',[]);
-          //this.$store.dispatch('mensajeExito','');
-          //this.$store.dispatch('mensajeFalla','');
-          document.getElementById('myModalLabel').innerHTML = 'Nuevo Cliente';
+          this.disabled = false;
+          this.$store.dispatch('selectReserva',[]);
+          document.getElementById('myModalLabel').innerHTML = 'Nueva Reserva';
 
           $('#myModal').modal('show');
         },
@@ -122,25 +120,25 @@
               }
 
               var data = {
-                  idcliente: idcliente,
-                  dni: dni,
-                  monto: monto,
-                  name: name,
-                  telefono: telefono
-                  };
+                idcliente: idcliente,
+                dni: dni,
+                monto: monto,
+                name: name,
+                telefono: telefono
+              };
 
-                  if(id != ''){
-                    this.updateReserva(data,id);
-                    return;
-                  }
+              if(id != ''){
+                this.updateReserva(data,id);
+                return;
+              }
 
-                  this.$store.dispatch('addReserva', data)
-                      .then(function(res){
-                          //vm.$store.dispatch('getAllClients')
-                          vm.showForm = false;                                  
-                        }, function(response){
-                          alert('error');
-                    })
+              this.$store.dispatch('addReserva', data)
+                  .then(function(res){
+                      //vm.$store.dispatch('getAllClients')
+                      vm.showForm = false;                                  
+                    }, function(response){
+                      alert('error');
+                })
             }
         },
         updateReserva(reserva,id){
@@ -155,13 +153,15 @@
               })
         },
         deleteReserva(reserva){
-              var data = { id: reserva };
-              this.$store.dispatch('deleteClient',data)
-              //this.$store.dispatch('getAllClients')      
+              confirm = confirm('Esta seguro que desea eliminar la reserva?');
+              if(confirm){
+                var data = { id: reserva };
+                this.$store.dispatch('deleteReserva',data)
+              }     
           },
           editarReserva(reserva,key){  
               reserva.id = key;           
-              this.showForm = true;
+              this.disabled = true;
               this.$store.dispatch('selectReserva',reserva);
               document.getElementById('myModalLabel').innerHTML = 'Editar Reserva';
 
