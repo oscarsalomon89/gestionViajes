@@ -5,7 +5,7 @@ import Home from '../components/Home.vue'
 import Transportes from '../components/Transportes.vue'
 import Reservas from '../components/reservas/Index.vue'
 import Login from '../components/Login.vue'
-import Eventos from '../components/Eventos.vue'
+import Eventos from '../components/eventos/Eventos.vue'
 import Clientes from '../components/Clientes.vue'
 
 Vue.use(Router)
