@@ -102,13 +102,14 @@
         addReserva(){          
             let vm = this;
             var id   = document.getElementById('idreserva').value;
+            var eventoSeleccionado = document.getElementById('eventoSeleccionado').value;
             var idcliente = document.getElementById('idcliente').value;
             var dni = document.getElementById('inputDni').value;
             var name = document.getElementById('inputName').value; 
             var telefono = document.getElementById('inputTelefono').value;
             var monto = document.getElementById('inputMonto').value;          
-
-            if (monto =='' || dni == '' || name == '' || telefono == '') {
+            
+            if (monto =='' || dni == '' || name == '' || telefono == '' || eventoSeleccionado == '') {
               var msgError = 'Datos incompletos';
               this.$store.dispatch('mensajeFalla', msgError)
             } else {
@@ -126,7 +127,8 @@
                 dni: dni,
                 monto: monto,
                 name: name,
-                telefono: telefono
+                telefono: telefono,
+                eventoSeleccionado: eventoSeleccionado
               };
 
               if(id != ''){
@@ -162,6 +164,8 @@
               }     
           },
           editarReserva(reserva,key){  
+              this.$store.dispatch('mensajeExito', null)
+              this.$store.dispatch('mensajeFalla', null)
               reserva.id = key;           
               this.disabled = true;
               this.$store.dispatch('selectReserva',reserva);

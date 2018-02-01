@@ -5,7 +5,7 @@
         <div class="form-group row">
             <label class="col-sm-4 control-label">Seleccionar evento</label>
             <div class="col-sm-8">
-                <select v-model="eventoSeleccionado" class="form-control">
+                <select id="eventoSeleccionado" class="form-control">
                     <option v-for="(evento,key) in listEventos" :key="key"
                         :value="key">
                         {{evento.primerEquipo}} VS {{evento.segundoEquipo}}
@@ -48,11 +48,6 @@ import { mapGetters, mapActions } from 'vuex'
         reservaSelected: 'reservaSelected',
         listEventos: 'allEventos'
       }),
-      data() {
-          return {
-              eventoSeleccionado: '',
-          }
-      },
       created () {
         this.$store.dispatch('getEventosFilter', null)
       },
