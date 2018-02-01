@@ -92,6 +92,8 @@
       methods: {
         openAddReserva(){
           this.disabled = false;
+          this.$store.dispatch('mensajeExito', null)
+          this.$store.dispatch('mensajeFalla', null)
           this.$store.dispatch('selectReserva',[]);
           document.getElementById('myModalLabel').innerHTML = 'Nueva Reserva';
 

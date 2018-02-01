@@ -6,7 +6,6 @@
     <button type="button" class="btn btn-primary" v-on:click="openAddEvento()" data-target="#myModal">
   Nuevo Evento
 </button>
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -18,8 +17,8 @@
         </button>
       </div>
       <div class="modal-body">
-          <form v-on:submit.prevent class="form-horizontal">
-            <input type="hidden" v-bind:value="evento.id" id="idevento" name="idevento">
+          <form v-show="addStatus == null" v-on:submit.prevent class="form-horizontal">
+            <input type="hidden" v-model="id" name="idevento">
             <div class="form-group row">
                 <label class="col-sm-4 control-label">Tipo de evento</label>
                 <div class="col-sm-8">
@@ -66,10 +65,12 @@
                 </div>
             </div>                     
         </form>
+        <p v-show="addFailure != null">{{ addFailure }}</p>
+        <p v-show="addStatus != null">{{ addStatus }}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        <button type="button" @click="addEvento()" class="btn btn-primary">Guardar</button>
+        <button type="button" v-on:click="addEvento()" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>
@@ -91,15 +92,15 @@
               </tr>
               </thead>
               <tr v-for="(evento,key,index) in listEventos" :key="key">
-                <td>{{index}}</td>
-                <th scope="row">{{evento.tipo}}</th>
-                <td>{{evento.primerEquipo}} VS {{evento.segundoEquipo}}</td>
+                <td>{{index+1}}</td>
+                <th>{{evento.tipoEvento}}</th>
+                <td scope="row">{{evento.primerEquipo}} VS {{evento.segundoEquipo}}</td>
                 <td>{{evento.monto}}</td>
                 <td>
                 <button @click="deleteEvento(key)" class="btn btn-danger btn-sm">
                     eliminar
                 </button>
-                <button @click="editarEvento(reserva,key)" class="btn btn-success btn-sm">
+                <button @click="editarEvento(evento,key)" class="btn btn-success btn-sm">
                     editar
                 </button>
                 </td>
@@ -118,11 +119,13 @@ export default {
     components: { 'Navbar': Navbar },
       computed: mapGetters({
         listEventos: 'allEventos',
-        eventoSelected: 'eventoSelected'
+        eventoSelected: 'eventoSelected',
+        addStatus: 'addStatus',
+        addFailure: 'addFailure'
       }),
       data() {
           return {
-              evento: [],
+              id: '',
               primerEquipo: 'River Plate',
               tipoEvento: 'partido',
               segundoEquipo: '',
@@ -136,16 +139,18 @@ export default {
       },
     methods: {
         openAddEvento(){
-          //this.$store.dispatch('selectEvento',[]);
           document.getElementById('myModalLabel').innerHTML = 'Nuevo Evento';
           document.getElementById('segundoEquipo').focus();
+          this.limpiarVariables();
+          this.$store.dispatch('mensajeExito', null)
+          this.$store.dispatch('mensajeFalla', null)
           $('#myModal').modal('show');
         },
-        addEvento(){          
+        addEvento(){        
             let vm = this;       
 
-            if (this.monto =='' || this.tipoEvento == '' || this.primerEquipo == '' || 
-                this.segundoEquipo == '' || this.tipoTransporte == '' || this.estado == '') {
+            if (this.monto == '' || this.tipoEvento == '' || this.primerEquipo == '' || 
+                this.segundoEquipo == '' || this.tipoTransporte == '') {
               var msgError = 'Datos incompletos';
               this.$store.dispatch('mensajeFalla', msgError)
             } else {
@@ -159,8 +164,8 @@ export default {
                 estado: this.estado
               };
 
-              if(id != ''){
-                this.updateEvento(data,id);
+              if(this.id != ''){
+                this.updateEvento(data,this.id);
                 return;
               }
 
@@ -190,12 +195,25 @@ export default {
               }     
           },
           editarEvento(evento,key){  
-              evento.id = key;           
-              this.disabled = true;
-              this.$store.dispatch('selectEvento',evento);
+              this.id = key;           
+              this.tipoEvento = evento.tipoEvento;
+              this.primerEquipo = evento.primerEquipo;
+              this.segundoEquipo = evento.segundoEquipo;
+              this.monto = evento.monto;
+              this.tipoTransporte = evento.tipoTransporte;
+              this.estado = evento.estado;
               document.getElementById('myModalLabel').innerHTML = 'Editar Evento';
 
               $('#myModal').modal('show');
+          },
+          limpiarVariables(){
+              this.id = '';           
+              this.tipoEvento = 'partido';
+              this.primerEquipo = 'River Plate';
+              this.segundoEquipo = '';
+              this.monto = '';
+              this.tipoTransporte = 'colectivo';
+              this.estado = 0;
           }      
       }
   }

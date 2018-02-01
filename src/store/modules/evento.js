@@ -20,6 +20,13 @@ const actions = {
     })
   },
 
+  getEventosFilter({ commit }, data) {
+    eventos.getEventosFilter(
+      data,
+      eventos => { commit('obtenerEventos', { eventos })}
+    )
+  },
+
   addEvento ({ commit }, data) {
     eventos.addEvento(
       data,
